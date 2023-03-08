@@ -19,7 +19,7 @@ def mobile(left, right):
     assert is_arm(left), "left must be a arm"
     assert is_arm(right), "right must be a arm"
     return ['mobile', left, right]
-
+    
 
 def is_mobile(m):
     """Return whether m is a mobile."""
@@ -65,13 +65,13 @@ def planet(mass):
     """Construct a planet of some mass."""
     assert mass > 0
     "*** YOUR CODE HERE ***"
-
+    return ["planet", mass]
 
 def mass(w):
     """Select the mass of a planet."""
     assert is_planet(w), 'must call mass on a planet'
     "*** YOUR CODE HERE ***"
-
+    return w[1]
 
 def is_planet(w):
     """Whether w is a planet."""
@@ -127,7 +127,12 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    right_torque = total_weight(right(m))*length(right(m))
+    left_torque =  total_weight(left(m))*length(left(m))
+    end_of_arm = m[2]
+    if is_mobile(m):
+        
+            if total_weight(end(left(m)))*length(end(left(m))) == total_weight(end(right(m)))*length(end(right(m)))
 
 def totals_tree(m):
     """Return a tree representing the mobile with its total weight at the root.
