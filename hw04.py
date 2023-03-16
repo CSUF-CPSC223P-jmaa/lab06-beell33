@@ -64,13 +64,11 @@ def end(s):
 def planet(mass):
     """Construct a planet of some mass."""
     assert mass > 0
-    "*** YOUR CODE HERE ***"
     return ["planet", mass]
 
 def mass(w):
     """Select the mass of a planet."""
     assert is_planet(w), 'must call mass on a planet'
-    "*** YOUR CODE HERE ***"
     return w[1]
 
 def is_planet(w):
@@ -126,13 +124,19 @@ def balanced(m):
     >>> check(HW_SOURCE_FILE, 'balanced', ['Index'])
     True
     """
-    "*** YOUR CODE HERE ***"
-    right_torque = total_weight(right(m))*length(right(m))
-    left_torque =  total_weight(left(m))*length(left(m))
-    end_of_arm = m[2]
-    if is_mobile(m):
+    if is_planet(m):
+        return True
+    else:
+        left_end = end(left(m))
+        right_end = end(right(m))
+        left_torque = length(left(m)) * total_weight(left_end)
+        right_torque = length(right(m)) * total_weight(right_end)
+        if left_torque != right_torque:
+            return False
+        else:
+            return balanced(left_end) and balanced(right_end)
+   
         
-            if total_weight(end(left(m)))*length(end(left(m))) == total_weight(end(right(m)))*length(end(right(m)))
 
 def totals_tree(m):
     """Return a tree representing the mobile with its total weight at the root.
@@ -163,8 +167,11 @@ def totals_tree(m):
     >>> check(HW_SOURCE_FILE, 'totals_tree', ['Index'])
     True
     """
-    "*** YOUR CODE HERE ***"
-
+    if is_planet(m):
+        return tree(total_weight(m))
+    else:
+        left_end, right_end = end(left(m)), end(right(m))
+        return tree(total_weight(m), [totals_tree(left_end), totals_tree(right_end)])
 
 def replace_loki_at_leaf(t, lokis_replacement):
     """Returns a new tree where every leaf value equal to "loki" has
@@ -195,8 +202,14 @@ def replace_loki_at_leaf(t, lokis_replacement):
     >>> laerad == yggdrasil # Make sure original tree is unmodified
     True
     """
-    "*** YOUR CODE HERE ***"
-
+    if is_leaf(t):
+        if label(t) == 'loki':
+            return tree(lokis_replacement)
+        else:
+            return t
+    else:
+        new_branches = [replace_loki_at_leaf(b, lokis_replacement) for b in branches(t)]
+        return tree(label(t), new_branches)
 
 def has_path(t, word):
     """Return whether there is a path in a tree where the entries along the path
@@ -229,7 +242,14 @@ def has_path(t, word):
     False
     """
     assert len(word) > 0, 'no path for empty word.'
-    "*** YOUR CODE HERE ***"
+    if label(t) == word[0]:
+        if len(word) == 1:
+            return True
+        else:
+            for branch in branches(t):
+                if has_path(branch, word[1:]):
+                    return True
+    return False
 
 
 def str_interval(x):
